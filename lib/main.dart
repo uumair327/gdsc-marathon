@@ -1,5 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:marathon/screens/Map.dart';
+import 'package:marathon/screens/quizPage.dart';
+import 'package:marathon/screens/scanner.dart';
 
 import 'utils/constants.dart';
 
@@ -21,10 +24,17 @@ class _MarathonState extends State<Marathon> {
       Icon(Icons.camera, size: 30,color: kLightGray,),
       Icon(Icons.map, size: 30, color: kLightGray,),
     ];
+
+    final screens = <Widget>[
+      QuizPage(),
+      ScannerPage(),
+      MapPage(),
+    ];
+
     return MaterialApp(
       title: "Marathon App",
       home: Scaffold(
-
+        extendBody: true,
         appBar: AppBar(
           title: Text("Marathon"),
           leading: Padding(child: Image.asset("images/logo.png"), padding: EdgeInsets.all(13.0),),
@@ -35,12 +45,12 @@ class _MarathonState extends State<Marathon> {
         backgroundColor: kLightGray,
 
         body: SafeArea(
-          child: Text("$index"),
+          child: screens[index],
         ),
 
         bottomNavigationBar: CurvedNavigationBar(
           items: items,
-          backgroundColor: kLightGray,
+          backgroundColor: Colors.transparent,
           color: kGreen,
           height: 60,
           index: index,
