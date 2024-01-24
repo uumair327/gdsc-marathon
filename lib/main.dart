@@ -20,9 +20,21 @@ class _MarathonState extends State<Marathon> {
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[
-      Icon(Icons.quiz, size:30, color: kLightGray,),
-      Icon(Icons.camera, size: 30,color: kLightGray,),
-      Icon(Icons.map, size: 30, color: kLightGray,),
+      Icon(
+        Icons.quiz,
+        size: 30,
+        color: kLightGray,
+      ),
+      Icon(
+        Icons.camera,
+        size: 30,
+        color: kLightGray,
+      ),
+      Icon(
+        Icons.map,
+        size: 30,
+        color: kLightGray,
+      ),
     ];
 
     final screens = <Widget>[
@@ -37,24 +49,24 @@ class _MarathonState extends State<Marathon> {
         extendBody: true,
         appBar: AppBar(
           title: Text("Marathon"),
-          leading: Padding(child: Image.asset("images/logo.png"), padding: EdgeInsets.all(13.0),),
+          leading: Padding(
+            child: Image.asset("images/logo.png"),
+            padding: EdgeInsets.all(13.0),
+          ),
           backgroundColor: kWhite,
           centerTitle: true,
         ),
-
         backgroundColor: kLightGray,
-
         body: SafeArea(
           child: screens[index],
         ),
-
         bottomNavigationBar: CurvedNavigationBar(
           items: items,
           backgroundColor: Colors.transparent,
           color: kGreen,
           height: 60,
           index: index,
-          onTap: (index)=>setState(() {
+          onTap: (index) => setState(() {
             this.index = index;
           }),
         ),
