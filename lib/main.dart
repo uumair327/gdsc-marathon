@@ -16,7 +16,7 @@ class Marathon extends StatefulWidget {
 }
 
 class _MarathonState extends State<Marathon> {
-  int index = 1;
+  int index = 2;
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[

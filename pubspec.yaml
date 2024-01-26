@@ -37,6 +37,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   curved_navigation_bar: ^1.0.3
   lucide_icons: ^0.257.0
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
+  flutter_map: ^3.1.0
+  latlng: ^0.2.0
+  latlong2: ^0.8.1
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
