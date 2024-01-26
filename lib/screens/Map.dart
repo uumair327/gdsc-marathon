@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:latlong2/latlong.dart';
@@ -5,6 +8,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
+
 
 
 class MapPage extends StatefulWidget {
@@ -15,6 +20,24 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  // Define a variable to store the current position
+  LatLng currentLocation = LatLng(52.05884, -1.345583);
+
+  // Create a timer that updates the current position every 10 seconds
+  Timer? locationUpdateTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Start the timer when the widget is initialized
+    locationUpdateTimer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
+      // Update the current position
+      Position newPosition = await getCurrentLocation();
+      setState(() {
+        currentLocation = LatLng(newPosition.latitude, newPosition.longitude);
+      });
+    });
+  }
   final start = TextEditingController();
   final end = TextEditingController();
   bool isVisible = false;
@@ -23,6 +46,19 @@ class _MapPageState extends State<MapPage> {
   List<LatLng> routepoints2 = [LatLng(52.05884, -1.345583)];
   List<LatLng> routepoints3 = [LatLng(52.05884, -1.345583)];
 
+  getCurrentLocation()async{
+    LocationPermission permission = await Geolocator.checkPermission();
+        if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever){
+          LocationPermission ask = await Geolocator.requestPermission();
+        }
+        else{
+          Position currentposition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+          print("Lat: ${currentposition.latitude.toString()}");
+          print("Lon: ${currentposition.longitude.toString()}");
+          return currentposition;
+        }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +164,7 @@ class _MapPageState extends State<MapPage> {
                     child: FlutterMap(options:
                     MapOptions(
                       center: routepoints1[0],
-                      zoom: 12,
+                      zoom: 17,
                     ),
                       nonRotatedChildren: [
                         AttributionWidget.defaultWidget(source: 'OpenStreetMap contributors',
@@ -146,7 +182,36 @@ class _MapPageState extends State<MapPage> {
                             Polyline(points: routepoints2, color: Colors.red, strokeWidth: 9),
                             Polyline(points: routepoints3, color: Colors.green, strokeWidth: 9)
                           ],
-                        )
+                        ),
+                        CircleLayer(
+                          circles: [
+                            CircleMarker(
+                              point: routepoints1[0],
+                              color: Colors.blue.withOpacity(0.3),
+                              radius: 100,
+                              useRadiusInMeter: true,
+                            ),
+                            CircleMarker(
+                              point: routepoints2[0],
+                              color: Colors.red.withOpacity(0.3),
+                              radius: 100,
+                              useRadiusInMeter: true,
+                            ),
+                            CircleMarker(
+                              point: routepoints3[0],
+                              color: Colors.green.withOpacity(0.3),
+                              radius: 100,
+                              useRadiusInMeter: true,
+                            ),
+                            CircleMarker(
+                              point: currentLocation,
+                              color: Colors.black.withOpacity(0.8),
+                              radius: 20,
+                              useRadiusInMeter: true,
+                            ),
+                          ],
+                        ),
+
                       ],
                     ),
                   ),
