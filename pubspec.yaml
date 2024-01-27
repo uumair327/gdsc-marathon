@@ -43,6 +43,7 @@ dependencies:
   latlng: ^0.2.0
   latlong2: ^0.8.1
   http: ^0.13.5
+  qr_bar_code_scanner_dialog: ^0.0.5
 
 dev_dependencies:
   flutter_test:
