@@ -44,6 +44,9 @@ dependencies:
   latlong2: ^0.8.1
   http: ^0.13.5
   qr_bar_code_scanner_dialog: ^0.0.5
+  firebase_auth: ^4.17.0
+  firebase_core: ^2.25.0
+  sign_in_button: ^3.2.0
 
 dev_dependencies:
   flutter_test:
