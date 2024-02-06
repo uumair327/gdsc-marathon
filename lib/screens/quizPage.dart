@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marathon/screens/scanner.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({Key? key}) : super(key: key);
@@ -146,16 +147,14 @@ class _QuizPageState extends State<QuizPage> {
       print('Incorrect!');
     }
 
-    moveToNextQuestion();
+    moveToScannerPage(); // Change to navigate to ScannerPage
   }
 
-  void moveToNextQuestion() {
-    setState(() {
-      if (currentQuestionIndex < quizData[selectedDifficulty]!.length - 1) {
-        currentQuestionIndex++;
-      } else {
-        print('Quiz completed for $selectedDifficulty level!');
-      }
-    });
+  void moveToScannerPage() {
+    // Navigate to ScannerPage
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ScannerPage()),
+    );
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:marathon/screens/quizPage.dart';
 import 'package:marathon/utils/constants.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class ScannerPage extends StatelessWidget {
-  ScannerPage({super.key});
+  ScannerPage({Key? key}) : super(key: key);
+
   final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
 
   @override
@@ -68,10 +70,16 @@ class ScannerPage extends StatelessWidget {
                   _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
                     context: context,
                     onCode: (scannedCode) {
-                      // setState(() {
-                      //   this.code = scannedCode;
-                      //   // Update checkpoint logic
-                      // });
+                      // Check the scanned code value
+                      if (scannedCode == "GDSC: Check Point 2") {
+                        // Navigate to QuizPage if the scanned code matches
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => QuizPage()),
+                        );
+                      } else {
+                        // Handle other scanned code values
+                      }
                     },
                   );
                 }),
