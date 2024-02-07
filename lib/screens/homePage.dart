@@ -1,10 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marathon/screens/quizPage.dart';
 import 'package:marathon/screens/scanner.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
 import '../utils/constants.dart';
 import 'Map.dart';
@@ -24,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   User? _user;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     _auth.authStateChanges().listen((event) {
@@ -35,19 +33,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final items = <Widget>[
-      Icon(
+      const Icon(
         Icons.quiz,
         size: 30,
         color: kLightGray,
       ),
-      Icon(
+      const Icon(
         Icons.camera,
         size: 30,
         color: kLightGray,
       ),
-      Icon(
+      const Icon(
         Icons.map,
         size: 30,
         color: kLightGray,
@@ -55,23 +53,23 @@ class _HomePageState extends State<HomePage> {
     ];
 
     final screens = <Widget>[
-      QuizPage(),
+      const QuizPage(),
       ScannerPage(),
-      MapPage(),
+      const MapPage(),
     ];
 
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: Text("Marathon"),
+        title: const Text("Marathon"),
         leading: Padding(
+          padding: const EdgeInsets.all(13.0),
           child: Image.asset("images/logo.png"),
-          padding: EdgeInsets.all(13.0),
         ),
         backgroundColor: kWhite,
         centerTitle: true,
         actions: [
-          _user != null ? _signOut(): Text("Hi"),
+          _user != null ? _signOut() : const Text("Hi"),
         ],
       ),
       backgroundColor: kLightGray,
@@ -91,7 +89,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _signOut(){
+  Widget _signOut() {
     return TextButton(onPressed: _auth.signOut, child: const Text("Sign Out"));
   }
 }

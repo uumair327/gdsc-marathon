@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   User? _user;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     _auth.authStateChanges().listen((event) {
@@ -26,22 +26,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleGoogleSignIn() {
-    try{
+    try {
       GoogleAuthProvider _googleAuthProvider = GoogleAuthProvider();
       _auth.signInWithProvider(_googleAuthProvider);
-    } catch(e) {
+    } catch (e) {
       print(e);
     }
   }
 
   @override
-  Widget build (BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: SizedBox(
+          child: SizedBox(
         height: 50,
-        child: SignInButton(Buttons.google, text: "Sign In With Google", onPressed: _handleGoogleSignIn),
-      ))  ,
+        child: SignInButton(Buttons.google,
+            text: "Sign In With Google", onPressed: _handleGoogleSignIn),
+      )),
     );
   }
 }

@@ -11,81 +11,84 @@ class ScannerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _openQRScanner(context);
     });
 
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: const Text(
-                    "00:00:00",
-                    style: TextStyle(color: kWhite, fontSize: 20),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: kRed, borderRadius: BorderRadius.circular(10)),
+                    child: const Text(
+                      "00:00:00",
+                      style: TextStyle(color: kWhite, fontSize: 20),
+                    ),
                   ),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: kRed, borderRadius: BorderRadius.circular(10)),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 5),
-                      child: const CircleAvatar(
-                          backgroundColor: kLightRed,
-                          child: Icon(
-                            LucideIcons.flame,
-                            color: kRed,
-                          )),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 5),
-                      child: const CircleAvatar(
-                          backgroundColor: kLightRed,
-                          child: Icon(
-                            LucideIcons.flame,
-                            color: kRed,
-                          )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(40),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: kLightYellow),
-                child: InkWell(onTap: () {
-                  _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                    context: context,
-                    onCode: (scannedCode) {
-                      // Check the scanned code value
-                      if (scannedCode == "GDSC: Check Point 2") {
-                        // Navigate to QuizPage if the scanned code matches
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => QuizPage()),
-                        );
-                      } else {
-                        // Handle other scanned code values
-                      }
-                    },
-                  );
-                }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 5),
+                        child: const CircleAvatar(
+                            backgroundColor: kLightRed,
+                            child: Icon(
+                              LucideIcons.flame,
+                              color: kRed,
+                            )),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 5),
+                        child: const CircleAvatar(
+                            backgroundColor: kLightRed,
+                            child: Icon(
+                              LucideIcons.flame,
+                              color: kRed,
+                            )),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            )
-          ],
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(40),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: kLightYellow),
+                  child: InkWell(onTap: () {
+                    _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                      context: context,
+                      onCode: (scannedCode) {
+                        // Check the scanned code value
+                        if (scannedCode == "GDSC: Check Point 2") {
+                          // Navigate to QuizPage if the scanned code matches
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const QuizPage()),
+                          );
+                        } else {
+                          // Handle other scanned code values
+                        }
+                      },
+                    );
+                  }),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,11 +1,10 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:marathon/firebase_options.dart';
 import 'package:marathon/screens/loginPage.dart';
-import './screens/homePage.dart';
 
+import './screens/homePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +25,7 @@ class _MarathonState extends State<Marathon> {
   User? _user;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     _auth.authStateChanges().listen((event) {
@@ -40,9 +39,8 @@ class _MarathonState extends State<Marathon> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Marathon App",
-      home: _user != null ?  const HomePage() : const LoginPage(),
+      home: _user != null ? const HomePage() : const LoginPage(),
       debugShowCheckedModeBanner: false,
     );
-    ;
   }
 }
