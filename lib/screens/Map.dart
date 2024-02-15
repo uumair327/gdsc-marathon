@@ -20,8 +20,9 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  final mapController = MapController();
   // Define a variable to store the current position
-  LatLng currentLocation = LatLng(52.05884, -1.345583);
+  LatLng currentLocation = LatLng(19.039519,72.859655);
 
   // Create a timer that updates the current position every 10 seconds
   Timer? locationUpdateTimer;
@@ -35,8 +36,10 @@ class _MapPageState extends State<MapPage> {
       Position newPosition = await getCurrentLocation();
       setState(() {
         currentLocation = LatLng(newPosition.latitude, newPosition.longitude);
+        mapController.move(currentLocation, 17);
       });
     });
+    loadMap();
   }
   final start = TextEditingController();
   final end = TextEditingController();
@@ -70,101 +73,104 @@ class _MapPageState extends State<MapPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[500]),
-                    onPressed: () async {
-                      List<Location> start1 = await locationFromAddress("Sion West, Sion, Mumbai, Maharashtra");
-                      List<Location> end1 = await locationFromAddress("Kurla West, Kurla, Mumbai, Maharashtra");
-
-                      var v1_1 = start1[0].latitude;
-                      var v2_1 = start1[0].longitude;
-                      var v3_1 = end1[0].latitude;
-                      var v4_1 = end1[0].longitude;
-
-                      // Route 1
-                      var url1 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_1,$v1_1;$v4_1,$v3_1?steps=true&annotations=true&geometries=geojson&overview=full');
-                      var response1 = await http.get(url1);
-                      print(response1.body);
-
-                      setState(() {
-                        routepoints1 = [];
-                        var route1 = jsonDecode(response1.body)['routes'][0]['geometry']['coordinates'];
-                        for (int i = 0; i < route1.length; i++) {
-                          var point = route1[i].toString();
-                          point = point.replaceAll("[", "");
-                          point = point.replaceAll("]", "");
-                          var lat1 = point.split(',');
-                          var long1 = point.split(",");
-                          routepoints1.add(LatLng(double.parse(lat1[1]), double.parse(long1[0])));
-                        }
-                      });
-
-                      // Route 2
-                      List<Location> start2 = await locationFromAddress("Kurla West, Kurla, Mumbai, Maharashtra");
-                      List<Location> end2 = await locationFromAddress("Ghatkopar West, Ghatkopar, Mumbai, Maharashtra");
-
-                      var v1_2 = start2[0].latitude;
-                      var v2_2 = start2[0].longitude;
-                      var v3_2 = end2[0].latitude;
-                      var v4_2 = end2[0].longitude;
-
-                      var url2 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_2,$v1_2;$v4_2,$v3_2?steps=true&annotations=true&geometries=geojson&overview=full');
-                      var response2 = await http.get(url2);
-                      print(response2.body);
-
-                      setState(() {
-                        routepoints2 = [];
-                        var route2 = jsonDecode(response2.body)['routes'][0]['geometry']['coordinates'];
-                        for (int i = 0; i < route2.length; i++) {
-                          var point = route2[i].toString();
-                          point = point.replaceAll("[", "");
-                          point = point.replaceAll("]", "");
-                          var lat2 = point.split(',');
-                          var long2 = point.split(",");
-                          routepoints2.add(LatLng(double.parse(lat2[1]), double.parse(long2[0])));
-                        }
-                      });
-
-                      // Route 3
-                      List<Location> start3 = await locationFromAddress("Ghatkopar West, Ghatkopar, Mumbai, Maharashtra");
-                      List<Location> end3 = await locationFromAddress("Vikhroli West, Vikhroli, Mumbai, Maharashtra");
-
-                      var v1_3 = start3[0].latitude;
-                      var v2_3 = start3[0].longitude;
-                      var v3_3 = end3[0].latitude;
-                      var v4_3 = end3[0].longitude;
-
-                      var url3 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_3,$v1_3;$v4_3,$v3_3?steps=true&annotations=true&geometries=geojson&overview=full');
-                      var response3 = await http.get(url3);
-                      print(response3.body);
-
-                      setState(() {
-                        routepoints3 = [];
-                        var route3 = jsonDecode(response3.body)['routes'][0]['geometry']['coordinates'];
-                        for (int i = 0; i < route3.length; i++) {
-                          var point = route3[i].toString();
-                          point = point.replaceAll("[", "");
-                          point = point.replaceAll("]", "");
-                          var lat3 = point.split(',');
-                          var long3 = point.split(",");
-                          routepoints3.add(LatLng(double.parse(lat3[1]), double.parse(long3[0])));
-                        }
-                      });
-
-                      isVisible = !isVisible;
-                    },
-
-                    child: Text("Lets Start")),
-                SizedBox(height: 10,),
+                // ElevatedButton(
+                //     style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[500]),
+                //     onPressed: () async {
+                //       List<Location> start1 = await locationFromAddress("Sion West, Sion, Mumbai, Maharashtra");
+                //       List<Location> end1 = await locationFromAddress("Kurla West, Kurla, Mumbai, Maharashtra");
+                //
+                //       var v1_1 = start1[0].latitude;
+                //       var v2_1 = start1[0].longitude;
+                //       var v3_1 = end1[0].latitude;
+                //       var v4_1 = end1[0].longitude;
+                //
+                //       // Route 1
+                //       var url1 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_1,$v1_1;$v4_1,$v3_1?steps=true&annotations=true&geometries=geojson&overview=full');
+                //       var response1 = await http.get(url1);
+                //       print(response1.body);
+                //
+                //       setState(() {
+                //         routepoints1 = [];
+                //         var route1 = jsonDecode(response1.body)['routes'][0]['geometry']['coordinates'];
+                //         for (int i = 0; i < route1.length; i++) {
+                //           var point = route1[i].toString();
+                //           point = point.replaceAll("[", "");
+                //           point = point.replaceAll("]", "");
+                //           var lat1 = point.split(',');
+                //           var long1 = point.split(",");
+                //           routepoints1.add(LatLng(double.parse(lat1[1]), double.parse(long1[0])));
+                //         }
+                //       });
+                //
+                //       // Route 2
+                //       List<Location> start2 = await locationFromAddress("Kurla West, Kurla, Mumbai, Maharashtra");
+                //       List<Location> end2 = await locationFromAddress("Ghatkopar West, Ghatkopar, Mumbai, Maharashtra");
+                //
+                //       var v1_2 = start2[0].latitude;
+                //       var v2_2 = start2[0].longitude;
+                //       var v3_2 = end2[0].latitude;
+                //       var v4_2 = end2[0].longitude;
+                //
+                //       var url2 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_2,$v1_2;$v4_2,$v3_2?steps=true&annotations=true&geometries=geojson&overview=full');
+                //       var response2 = await http.get(url2);
+                //       print(response2.body);
+                //
+                //       setState(() {
+                //         routepoints2 = [];
+                //         var route2 = jsonDecode(response2.body)['routes'][0]['geometry']['coordinates'];
+                //         for (int i = 0; i < route2.length; i++) {
+                //           var point = route2[i].toString();
+                //           point = point.replaceAll("[", "");
+                //           point = point.replaceAll("]", "");
+                //           var lat2 = point.split(',');
+                //           var long2 = point.split(",");
+                //           routepoints2.add(LatLng(double.parse(lat2[1]), double.parse(long2[0])));
+                //         }
+                //       });
+                //
+                //       // Route 3
+                //       List<Location> start3 = await locationFromAddress("Ghatkopar West, Ghatkopar, Mumbai, Maharashtra");
+                //       List<Location> end3 = await locationFromAddress("Vikhroli West, Vikhroli, Mumbai, Maharashtra");
+                //
+                //       var v1_3 = start3[0].latitude;
+                //       var v2_3 = start3[0].longitude;
+                //       var v3_3 = end3[0].latitude;
+                //       var v4_3 = end3[0].longitude;
+                //
+                //       var url3 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_3,$v1_3;$v4_3,$v3_3?steps=true&annotations=true&geometries=geojson&overview=full');
+                //       var response3 = await http.get(url3);
+                //       print(response3.body);
+                //
+                //       setState(() {
+                //         routepoints3 = [];
+                //         var route3 = jsonDecode(response3.body)['routes'][0]['geometry']['coordinates'];
+                //         for (int i = 0; i < route3.length; i++) {
+                //           var point = route3[i].toString();
+                //           point = point.replaceAll("[", "");
+                //           point = point.replaceAll("]", "");
+                //           var lat3 = point.split(',');
+                //           var long3 = point.split(",");
+                //           routepoints3.add(LatLng(double.parse(lat3[1]), double.parse(long3[0])));
+                //         }
+                //       });
+                //
+                //       isVisible = !isVisible;
+                //     },
+                //
+                //     child: Text("Lets Start")),
+                // SizedBox(height: 10,),
                 SizedBox(
-                  height: 500,
+                  height: 800,
                   width: 400,
                   child: Visibility(
                     visible: isVisible,
-                    child: FlutterMap(options:
+                    child: FlutterMap(
+                      mapController: mapController,
+                      options:
                     MapOptions(
-                      center: routepoints1[0],
+                      center: currentLocation,
                       zoom: 17,
+
                     ),
                       nonRotatedChildren: [
                         AttributionWidget.defaultWidget(source: 'OpenStreetMap contributors',
@@ -222,6 +228,88 @@ class _MapPageState extends State<MapPage> {
         ),
       ),
     );
+  }
+
+  void loadMap() async{
+          List<Location> start1 = await locationFromAddress("Sion West, Sion, Mumbai, Maharashtra");
+          List<Location> end1 = await locationFromAddress("Kurla West, Kurla, Mumbai, Maharashtra");
+
+          var v1_1 = start1[0].latitude;
+          var v2_1 = start1[0].longitude;
+          var v3_1 = end1[0].latitude;
+          var v4_1 = end1[0].longitude;
+
+          // Route 1
+          var url1 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_1,$v1_1;$v4_1,$v3_1?steps=true&annotations=true&geometries=geojson&overview=full');
+          var response1 = await http.get(url1);
+          print(response1.body);
+
+          setState(() {
+            routepoints1 = [];
+            var route1 = jsonDecode(response1.body)['routes'][0]['geometry']['coordinates'];
+            for (int i = 0; i < route1.length; i++) {
+              var point = route1[i].toString();
+              point = point.replaceAll("[", "");
+              point = point.replaceAll("]", "");
+              var lat1 = point.split(',');
+              var long1 = point.split(",");
+              routepoints1.add(LatLng(double.parse(lat1[1]), double.parse(long1[0])));
+            }
+          });
+
+          // Route 2
+          List<Location> start2 = await locationFromAddress("Kurla West, Kurla, Mumbai, Maharashtra");
+          List<Location> end2 = await locationFromAddress("Ghatkopar West, Ghatkopar, Mumbai, Maharashtra");
+
+          var v1_2 = start2[0].latitude;
+          var v2_2 = start2[0].longitude;
+          var v3_2 = end2[0].latitude;
+          var v4_2 = end2[0].longitude;
+
+          var url2 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_2,$v1_2;$v4_2,$v3_2?steps=true&annotations=true&geometries=geojson&overview=full');
+          var response2 = await http.get(url2);
+          print(response2.body);
+
+          setState(() {
+            routepoints2 = [];
+            var route2 = jsonDecode(response2.body)['routes'][0]['geometry']['coordinates'];
+            for (int i = 0; i < route2.length; i++) {
+              var point = route2[i].toString();
+              point = point.replaceAll("[", "");
+              point = point.replaceAll("]", "");
+              var lat2 = point.split(',');
+              var long2 = point.split(",");
+              routepoints2.add(LatLng(double.parse(lat2[1]), double.parse(long2[0])));
+            }
+          });
+
+          // Route 3
+          List<Location> start3 = await locationFromAddress("Ghatkopar West, Ghatkopar, Mumbai, Maharashtra");
+          List<Location> end3 = await locationFromAddress("Vikhroli West, Vikhroli, Mumbai, Maharashtra");
+
+          var v1_3 = start3[0].latitude;
+          var v2_3 = start3[0].longitude;
+          var v3_3 = end3[0].latitude;
+          var v4_3 = end3[0].longitude;
+
+          var url3 = Uri.parse('http://router.project-osrm.org/route/v1/driving/$v2_3,$v1_3;$v4_3,$v3_3?steps=true&annotations=true&geometries=geojson&overview=full');
+          var response3 = await http.get(url3);
+          print(response3.body);
+
+          setState(() {
+            routepoints3 = [];
+            var route3 = jsonDecode(response3.body)['routes'][0]['geometry']['coordinates'];
+            for (int i = 0; i < route3.length; i++) {
+              var point = route3[i].toString();
+              point = point.replaceAll("[", "");
+              point = point.replaceAll("]", "");
+              var lat3 = point.split(',');
+              var long3 = point.split(",");
+              routepoints3.add(LatLng(double.parse(lat3[1]), double.parse(long3[0])));
+            }
+          });
+
+          isVisible = true;
   }
 }
 
