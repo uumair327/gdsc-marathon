@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBQFsD5_xnkxTWMVYeFlLczrvZHxFb3-Dk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>517670346620</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.marathon</string>
+	<key>PROJECT_ID</key>
+	<string>gdscmarathon-6c39c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gdscmarathon-6c39c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:517670346620:ios:674e2048a9c6be0fc80ef9</string>
+</dict>
+</plist>

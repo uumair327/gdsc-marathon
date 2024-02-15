@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "517670346620",
+    "project_id": "gdscmarathon-6c39c",
+    "storage_bucket": "gdscmarathon-6c39c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517670346620:android:514a1ca402458eacc80ef9",
+        "android_client_info": {
+          "package_name": "com.example.marathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517670346620-me8lkj1vtijn8r0kggmkvtbegjb25cps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTmo9OZ1ST1IHtyG6_4bXkH2swifMKIj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517670346620-me8lkj1vtijn8r0kggmkvtbegjb25cps.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "517670346620-jvj3ehcf25eo0h00v3aa7bnrqdrd3rn3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.marathon"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
