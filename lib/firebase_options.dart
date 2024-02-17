@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '517670346620',
     projectId: 'gdscmarathon-6c39c',
     storageBucket: 'gdscmarathon-6c39c.appspot.com',
+    androidClientId: '517670346620-qkbn3iao1qm6s3qf62qlch4582vd7qoh.apps.googleusercontent.com',
     iosClientId: '517670346620-jvj3ehcf25eo0h00v3aa7bnrqdrd3rn3.apps.googleusercontent.com',
     iosBundleId: 'com.example.marathon',
   );

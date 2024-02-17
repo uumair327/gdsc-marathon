@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marathon/firestore/questions.dart';
 import 'package:marathon/screens/scanner.dart';
 
 class QuizPage extends StatefulWidget {
@@ -9,29 +10,41 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  final Map<String, List<Map<String, dynamic>>> quizData = {
-    'easy': [
-      {
-        'question': 'What is the capital of France?',
-        'options': ['Paris', 'Berlin', 'London', 'Madrid'],
-        'correctAnswer': 'Paris',
-      },
-    ],
-    'medium': [
-      {
-        'question': 'What is the largest mammal on Earth?',
-        'options': ['Elephant', 'Blue Whale', 'Giraffe', 'Lion'],
-        'correctAnswer': 'Blue Whale',
-      },
-    ],
-    'hard': [
-      {
-        'question': 'Who wrote the tragedy play "Macbeth"?',
-        'options': ['Shakespeare', 'Homer', 'Virgil', 'Dante'],
-        'correctAnswer': 'Shakespeare',
-      },
-    ],
-  };
+  // Map<String, List<Map<String, dynamic>>> quizData = {
+  //   'easy': [
+  //     {
+  //       'question': 'What is the capital of France?',
+  //       'options': ['Paris', 'Berlin', 'London', 'Madrid'],
+  //       'correctAnswer': 'Paris',
+  //     },
+  //   ],
+  //   'medium': [
+  //     {
+  //       'question': 'What is the largest mammal on Earth?',
+  //       'options': ['Elephant', 'Blue Whale', 'Giraffe', 'Lion'],
+  //       'correctAnswer': 'Blue Whale',
+  //     },
+  //   ],
+  //   'hard': [
+  //     {
+  //       'question': 'Who wrote the tragedy play "Macbeth"?',
+  //       'options': ['Shakespeare', 'Homer', 'Virgil', 'Dante'],
+  //       'correctAnswer': 'Shakespeare',
+  //     },
+  //   ],
+  // };
+
+  var quizData;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchQuestions().then((questions) {
+      setState(() {
+        quizData = questions;
+      });
+    });
+  }
 
   int currentQuestionIndex = 0;
   String selectedDifficulty = 'easy';
@@ -79,16 +92,14 @@ class _QuizPageState extends State<QuizPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      quizData[selectedDifficulty]![currentQuestionIndex]
-                          ['question'],
+                      quizData[0]['name'],
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 ...List.generate(
-                  quizData[selectedDifficulty]![currentQuestionIndex]['options']
-                      .length,
+                  quizData[0]['options'].length,
                   (index) => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
@@ -102,8 +113,7 @@ class _QuizPageState extends State<QuizPage> {
                       checkAnswer(index);
                     },
                     child: Text(
-                      quizData[selectedDifficulty]![currentQuestionIndex]
-                          ['options'][index],
+                      quizData[0]['options'][index],
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
@@ -130,8 +140,7 @@ class _QuizPageState extends State<QuizPage> {
       // Handle incorrect answer logic
       print('Incorrect!');
     }
-
-    moveToScannerPage(); // Change to navigate to ScannerPage
+    //moveToScannerPage(); // Change to navigate to ScannerPage
   }
 
   void moveToScannerPage() {
