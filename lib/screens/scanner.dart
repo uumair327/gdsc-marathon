@@ -103,20 +103,21 @@ class _ScannerPageState extends State<ScannerPage> {
                 ),
                 Column(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.all(40),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: kLightYellow),
-                      child: IconButton(
-                        onPressed: () {
-                          _openQRScanner(context);
-                        },
-                        icon: const Icon(Icons.qr_code),
-                        iconSize: 64,
-                        color: kLightRed,
+                    if (marathonStarted)
+                      Container(
+                        margin: const EdgeInsets.all(40),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: kLightYellow),
+                        child: IconButton(
+                          onPressed: () {
+                            _openQRScanner(context);
+                          },
+                          icon: const Icon(Icons.qr_code),
+                          iconSize: 64,
+                          color: kLightRed,
+                        ),
                       ),
-                    ),
                     if (!marathonStarted)
                       ElevatedButton(
                         onPressed: () {
