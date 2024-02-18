@@ -59,74 +59,76 @@ class _QuizPageState extends State<QuizPage> {
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                DropdownButton<String>(
-                  value: selectedDifficulty,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedDifficulty = newValue!;
-                      currentQuestionIndex = 0;
-                    });
-                  },
-                  items: ['easy', 'medium', 'hard']
-                      .map(
-                        (value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 4.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      quizData[0]['name'],
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ...List.generate(
-                  quizData[0]['options'].length,
-                  (index) => Column(
-                    children: [
-                      const SizedBox(height: 10, width: double.infinity),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.all(30.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  DropdownButton<String>(
+                    value: selectedDifficulty,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedDifficulty = newValue!;
+                        currentQuestionIndex = 0;
+                      });
+                    },
+                    items: ['easy', 'medium', 'hard']
+                        .map(
+                          (value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ),
-                          onPressed: () {
-                            checkAnswer(index);
-                          },
-                          child: Text(
-                            quizData[0]['options'][index],
-                            style: const TextStyle(fontSize: 16),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        quizData[0]['name'],
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ...List.generate(
+                    quizData[0]['options'].length,
+                    (index) => Column(
+                      children: [
+                        const SizedBox(height: 10, width: double.infinity),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.all(30.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                            onPressed: () {
+                              checkAnswer(index);
+                            },
+                            child: Text(
+                              quizData[0]['options'][index],
+                              style: const TextStyle(fontSize: 16),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

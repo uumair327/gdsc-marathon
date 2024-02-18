@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:marathon/screens/quizPage.dart';
 import 'package:marathon/utils/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+
+class StopwatchProvider extends ChangeNotifier {
+  final StopWatchTimer stopwatch = StopWatchTimer();
+}
 
 class ScannerPage extends StatefulWidget {
   ScannerPage({Key? key}) : super(key: key);
@@ -13,33 +18,17 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> {
-  final stopwatch = StopWatchTimer(onChange: (value) {
-    final displayTime = StopWatchTimer.getDisplayTime(value);
-  });
+  late StopWatchTimer stopwatch;
   bool marathonStarted = false;
   final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
-
-  String _printDuration(Duration duration) {
-    String milliseconds = (duration.inMilliseconds % 1000)
-        .toString()
-        .padLeft(2, "0"); // this one for the miliseconds
-    String seconds = ((duration.inMilliseconds ~/ 1000) % 60)
-        .toString()
-        .padLeft(2, "0"); // this is for the second
-    String minutes =
-        ((duration.inMilliseconds ~/ 1000) ~/ 60).toString().padLeft(2, "0");
-    return "$minutes : $seconds : $milliseconds";
-  }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await stopwatch.dispose(); // Need to call dispose function.
+    stopwatch = context.read<StopwatchProvider>().stopwatch;
+    stopwatch.rawTime.listen((value) {
+      setState(() {}); // Update UI when stopwatch changes
+    });
   }
 
   @override
