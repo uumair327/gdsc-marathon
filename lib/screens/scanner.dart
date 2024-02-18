@@ -115,8 +115,8 @@ class _ScannerPageState extends State<ScannerPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: kLightYellow),
-                      child: IconButton(
-                        onPressed: () {
+                      child: GestureDetector(
+                        onTap: () {
                           _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
                             context: context,
                             onCode: (scannedCode) {
@@ -134,9 +134,11 @@ class _ScannerPageState extends State<ScannerPage> {
                             },
                           );
                         },
-                        icon: const Icon(Icons.qr_code),
-                        iconSize: 64,
-                        color: kLightRed,
+                        child: Icon(
+                          Icons.qr_code,
+                          size: 64,
+                          color: kLightRed,
+                        ),
                       ),
                     ),
                     ElevatedButton(
