@@ -117,18 +117,19 @@ class _ScannerPageState extends State<ScannerPage> {
                         color: kLightRed,
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          marathonStarted = true;
-                          stopwatch.onStartTimer();
-                        });
-                      },
-                      child: const Text(
-                        'Start Marathon',
-                        style: TextStyle(fontSize: 18),
+                    if (!marathonStarted)
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            marathonStarted = true;
+                            stopwatch.onStartTimer();
+                          });
+                        },
+                        child: const Text(
+                          'Start Marathon',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
                   ],
                 )
               ],
