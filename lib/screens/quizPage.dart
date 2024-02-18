@@ -93,14 +93,23 @@ class _QuizPageState extends State<QuizPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        quizData[0]['name'],
+                        quizData
+                            .where((e) =>
+                                e["checkpoint"] == 0 &&
+                                e["difficulty"] == selectedDifficulty)
+                            .toList()[0]['name'],
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ...List.generate(
-                    quizData[0]['options'].length,
+                    quizData
+                        .where((e) =>
+                            e["checkpoint"] == 0 &&
+                            e["difficulty"] == selectedDifficulty)
+                        .toList()[0]['options']
+                        .length,
                     (index) => Column(
                       children: [
                         const SizedBox(height: 10, width: double.infinity),
@@ -119,7 +128,11 @@ class _QuizPageState extends State<QuizPage> {
                               checkAnswer(index);
                             },
                             child: Text(
-                              quizData[0]['options'][index],
+                              quizData
+                                  .where((e) =>
+                                      e["checkpoint"] == 0 &&
+                                      e["difficulty"] == selectedDifficulty)
+                                  .toList()[0]['options'][index],
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),

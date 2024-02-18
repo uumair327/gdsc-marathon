@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:marathon/firestore/userdata.dart';
 import 'package:marathon/screens/quizPage.dart';
 import 'package:marathon/screens/stopwatch_provider.dart';
 import 'package:marathon/utils/constants.dart';
@@ -146,8 +147,20 @@ class _ScannerPageState extends State<ScannerPage> {
       context: context,
       onCode: (scannedCode) {
         // Handle the scanned code as needed
-        if (scannedCode == "GDSC: Check Point 2") {
-          // Navigate to QuizPage if the scanned code matches
+        if (scannedCode == "Checkpoint 1") {
+          updateCheckpoint(1);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const QuizPage()),
+          );
+        } else if (scannedCode == "Checkpoint 2") {
+          updateCheckpoint(2);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const QuizPage()),
+          );
+        } else if (scannedCode == "Checkpoint 3") {
+          updateCheckpoint(3);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const QuizPage()),
