@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:marathon/screens/quizPage.dart';
+import 'package:marathon/screens/stopwatch_provider.dart';
 import 'package:marathon/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
-class StopwatchProvider extends ChangeNotifier {
-  final StopWatchTimer stopwatch = StopWatchTimer();
-}
 
 class ScannerPage extends StatefulWidget {
   ScannerPage({Key? key}) : super(key: key);
@@ -33,10 +30,6 @@ class _ScannerPageState extends State<ScannerPage> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _openQRScanner(context);
-    });
-
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -115,30 +108,13 @@ class _ScannerPageState extends State<ScannerPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: kLightYellow),
-                      child: GestureDetector(
-                        onTap: () {
-                          _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                            context: context,
-                            onCode: (scannedCode) {
-                              // Check the scanned code value
-                              if (scannedCode == "GDSC: Check Point 2") {
-                                // Navigate to QuizPage if the scanned code matches
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const QuizPage()),
-                                );
-                              } else {
-                                // Handle other scanned code values
-                              }
-                            },
-                          );
+                      child: IconButton(
+                        onPressed: () {
+                          _openQRScanner(context);
                         },
-                        child: Icon(
-                          Icons.qr_code,
-                          size: 64,
-                          color: kLightRed,
-                        ),
+                        icon: const Icon(Icons.qr_code),
+                        iconSize: 64,
+                        color: kLightRed,
                       ),
                     ),
                     ElevatedButton(
@@ -168,10 +144,15 @@ class _ScannerPageState extends State<ScannerPage> {
       context: context,
       onCode: (scannedCode) {
         // Handle the scanned code as needed
-        // setState(() {
-        //   this.code = scannedCode;
-        //   // Update checkpoint logic
-        // });
+        if (scannedCode == "GDSC: Check Point 2") {
+          // Navigate to QuizPage if the scanned code matches
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const QuizPage()),
+          );
+        } else {
+          // Handle other scanned code values
+        }
       },
     );
   }

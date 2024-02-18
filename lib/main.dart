@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:marathon/firebase_options.dart';
 import 'package:marathon/screens/loginPage.dart';
+import 'package:marathon/screens/stopwatch_provider.dart';
+import 'package:provider/provider.dart';
 
 import './screens/homePage.dart';
 
@@ -37,10 +39,15 @@ class _MarathonState extends State<Marathon> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Marathon App",
-      home: _user != null ? const HomePage() : const LoginPage(),
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => StopwatchProvider()),
+      ],
+      child: MaterialApp(
+        title: "Marathon App",
+        home: _user != null ? const HomePage() : const LoginPage(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
