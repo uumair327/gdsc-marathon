@@ -26,13 +26,13 @@ void setUser(email) async {
   }
 }
 
-void updateCheckpoint(newCheckpoint) async {
+void updateCheckpoint(newCheckpoint, stopwatch) async {
   try {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    db.collection("users").doc(FirebaseAuth.instance.currentUser?.uid).set({
-      "currentCheckpoint": newCheckpoint
-    }, SetOptions(merge: true)).onError(
-        (e, _) => print("Error writing document: $e"));
+    db.collection("users").doc(FirebaseAuth.instance.currentUser?.uid).update({
+      "currentCheckpoint": newCheckpoint,
+      "checkpointTimes": FieldValue.arrayUnion([stopwatch]),
+    }).onError((e, _) => print("Error writing document: $e"));
   } catch (e) {
     print('Error setting user: $e');
   }
