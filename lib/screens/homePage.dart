@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int index = 2;
+  int index = 1;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
