@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:marathon/firestore/userdata.dart';
 import 'package:marathon/screens/quizPage.dart';
 import 'package:marathon/utils/constants.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
@@ -176,11 +177,13 @@ class _ScannerPageState extends State<ScannerPage> {
     _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
       context: context,
       onCode: (scannedCode) {
-        // Handle the scanned code as needed
-        // setState(() {
-        //   this.code = scannedCode;
-        //   // Update checkpoint logic
-        // });
+        if(scannedCode == "Checkpoint 1"){
+          updateCheckpoint(1);
+        }else if(scannedCode == "Checkpoint 2"){
+          updateCheckpoint(2);
+        }else if(scannedCode == "Checkpoint 3"){
+          updateCheckpoint(3);
+        }
       },
     );
   }
