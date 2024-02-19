@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:marathon/firestore/userdata.dart';
@@ -19,6 +21,7 @@ class _ScannerPageState extends State<ScannerPage> {
   late StopWatchTimer stopwatch;
   bool marathonStarted = false;
   final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
+  var score=0;
 
   @override
   void initState() {
@@ -27,6 +30,38 @@ class _ScannerPageState extends State<ScannerPage> {
     stopwatch.rawTime.listen((value) {
       setState(() {}); // Update UI when stopwatch changes
     });
+    getScore().then((value) => setState(() {
+      score=value;
+    }));
+  }
+
+  Future<int> getScore() async {
+    // Get the current user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Reference to the users collection in Firestore
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+      // Get the document snapshot for the current user
+      DocumentSnapshot snapshot = await users.doc(user.uid).get();
+
+      // Check if the user document exists
+      if (snapshot.exists) {
+        // Cast snapshot.data() to Map<String, dynamic>
+        Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+
+        // Get the score from the user's data
+        int score = userData['score'] ?? 0;
+        return score;
+      } else {
+        // User document doesn't exist
+        throw Exception('User document does not exist');
+      }
+    } else {
+      // User is not authenticated
+      throw Exception('User not authenticated');
+    }
   }
 
   @override
@@ -78,25 +113,35 @@ class _ScannerPageState extends State<ScannerPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 5),
-                          child: const CircleAvatar(
-                              backgroundColor: kLightRed,
-                              child: Icon(
-                                LucideIcons.flame,
-                                color: kRed,
-                              )),
+                        Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                              child: CircleAvatar(
+                                backgroundColor: kLightRed,
+                                child: Text('$score'),
+                              ),
+                            ),
+                            Text("Score")
+                          ],
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 5),
-                          child: const CircleAvatar(
-                              backgroundColor: kLightRed,
-                              child: Icon(
-                                LucideIcons.flame,
-                                color: kRed,
-                              )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 5),
+                                child: const CircleAvatar(
+                                    backgroundColor: kLightRed,
+                                    child: Icon(
+                                      LucideIcons.flame,
+                                      color: kRed,
+                                    )),
+                              ),
+                              Text("Calories")
+                            ],
+                          ),
                         ),
                       ],
                     )

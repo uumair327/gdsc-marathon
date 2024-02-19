@@ -21,6 +21,13 @@ class _HomePageState extends State<HomePage> {
 
   User? _user;
 
+  void updateIndex(int index){
+    setState(() {
+      this.index = index;
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -93,3 +100,4 @@ class _HomePageState extends State<HomePage> {
     return TextButton(onPressed: _auth.signOut, child: const Text("Sign Out"));
   }
 }
+

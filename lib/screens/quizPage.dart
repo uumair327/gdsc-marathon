@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marathon/firestore/questions.dart';
 import 'package:marathon/firestore/userdata.dart';
+import 'package:marathon/screens/homePage.dart';
 import 'package:marathon/screens/scanner.dart';
 
 class QuizPage extends StatefulWidget {
@@ -32,6 +33,14 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
+  void moveToScannerPage() {
+    Navigator.pushReplacement<void, void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) =>  HomePage(),
+      ),
+    );
+  }
 
   int currentCheckpoint = -1;
   int currentQuestionIndex = 0;
@@ -158,16 +167,12 @@ class _QuizPageState extends State<QuizPage> {
             }else if(difficulty == "hard"){
               updateScore(3);
             }
-            moveToScannerPage();
+
           }
         });
+
+    moveToScannerPage();
   }
 
-  void moveToScannerPage() {
-    // Navigate to ScannerPage
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ScannerPage()),
-    );
-  }
+
 }
