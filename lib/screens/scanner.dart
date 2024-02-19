@@ -149,23 +149,10 @@ class _ScannerPageState extends State<ScannerPage> {
         // Handle the scanned code as needed
         if (scannedCode == "Checkpoint 1") {
           updateCheckpoint(1, stopwatch.rawTime.value);
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QuizPage()),
-          );
         } else if (scannedCode == "Checkpoint 2") {
           updateCheckpoint(2, stopwatch.rawTime.value);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QuizPage()),
-          );
         } else if (scannedCode == "Checkpoint 3") {
           updateCheckpoint(3, stopwatch.rawTime.value);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QuizPage()),
-          );
         } else {
           // Handle other scanned code values
         }
