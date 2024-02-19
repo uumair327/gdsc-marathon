@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marathon/firestore/questions.dart';
+import 'package:marathon/firestore/userdata.dart';
 import 'package:marathon/screens/scanner.dart';
 
 class QuizPage extends StatefulWidget {
@@ -10,31 +13,8 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  // Map<String, List<Map<String, dynamic>>> quizData = {
-  //   'easy': [
-  //     {
-  //       'question': 'What is the capital of France?',
-  //       'options': ['Paris', 'Berlin', 'London', 'Madrid'],
-  //       'correctAnswer': 'Paris',
-  //     },
-  //   ],
-  //   'medium': [
-  //     {
-  //       'question': 'What is the largest mammal on Earth?',
-  //       'options': ['Elephant', 'Blue Whale', 'Giraffe', 'Lion'],
-  //       'correctAnswer': 'Blue Whale',
-  //     },
-  //   ],
-  //   'hard': [
-  //     {
-  //       'question': 'Who wrote the tragedy play "Macbeth"?',
-  //       'options': ['Shakespeare', 'Homer', 'Virgil', 'Dante'],
-  //       'correctAnswer': 'Shakespeare',
-  //     },
-  //   ],
-  // };
-
   var quizData;
+  var chk;
 
   @override
   void initState() {
@@ -44,8 +24,16 @@ class _QuizPageState extends State<QuizPage> {
         quizData = questions;
       });
     });
+
+    getCurrentCheckpoint().then((checkpoint) {
+      setState(() {
+        chk = checkpoint;
+      });
+    });
   }
 
+
+  int currentCheckpoint = -1;
   int currentQuestionIndex = 0;
   String selectedDifficulty = 'easy';
 
@@ -95,8 +83,9 @@ class _QuizPageState extends State<QuizPage> {
                       child: Text(
                         quizData
                             .where((e) =>
-                                e["checkpoint"] == 0 &&
-                                e["difficulty"] == selectedDifficulty)
+                                e["checkpoint"] == chk &&
+                                e["difficulty"] == selectedDifficulty
+                              )
                             .toList()[0]['name'],
                         style: const TextStyle(fontSize: 20),
                       ),
@@ -106,7 +95,7 @@ class _QuizPageState extends State<QuizPage> {
                   ...List.generate(
                     quizData
                         .where((e) =>
-                            e["checkpoint"] == 0 &&
+                            e["checkpoint"] == chk &&
                             e["difficulty"] == selectedDifficulty)
                         .toList()[0]['options']
                         .length,
@@ -130,7 +119,7 @@ class _QuizPageState extends State<QuizPage> {
                             child: Text(
                               quizData
                                   .where((e) =>
-                                      e["checkpoint"] == 0 &&
+                                      e["checkpoint"] == chk &&
                                       e["difficulty"] == selectedDifficulty)
                                   .toList()[0]['options'][index],
                               style: const TextStyle(fontSize: 16),
@@ -150,20 +139,28 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void checkAnswer(int selectedOptionIndex) {
-    final String correctAnswer =
-        quizData[selectedDifficulty]![currentQuestionIndex]['correctAnswer'];
-    final String selectedAnswer =
-        quizData[selectedDifficulty]![currentQuestionIndex]['options']
-            [selectedOptionIndex];
-
-    if (selectedAnswer == correctAnswer) {
-      // Handle correct answer logic
-      print('Correct!');
-    } else {
-      // Handle incorrect answer logic
-      print('Incorrect!');
-    }
-    //moveToScannerPage(); // Change to navigate to ScannerPage
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("questions")
+        .where("difficulty", isEqualTo: selectedDifficulty )
+        .where("checkpoint", isEqualTo: chk)
+        .get()
+        .then((querysnapshot) {
+          final data = querysnapshot.docs[0].data() as Map<String, dynamic>;
+          int correctOption = data["correctOption"];
+          String difficulty = data["difficulty"];
+          print("s $selectedOptionIndex");
+          print("c $correctOption");
+          if(selectedOptionIndex == correctOption){
+            if(difficulty == "easy"){
+              updateScore(1);
+            }else if(difficulty == "medium"){
+              updateScore(2);
+            }else if(difficulty == "hard"){
+              updateScore(3);
+            }
+            moveToScannerPage();
+          }
+        });
   }
 
   void moveToScannerPage() {
