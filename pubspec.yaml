@@ -52,6 +52,7 @@ dependencies:
   pedometer: ^4.0.1
   shared_preferences: ^2.2.2
   provider: ^6.1.1
+  syncfusion_flutter_gauges: ^24.2.7
 
 dev_dependencies:
   flutter_test:
