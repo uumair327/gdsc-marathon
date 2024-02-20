@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:pedometer/pedometer.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 
 Random random = Random();
@@ -31,9 +32,10 @@ class _ScannerPageState extends State<ScannerPage> {
   var score=0;
   //pedometer initializations
   late Stream<StepCount> _stepCountStream;
-  // late Stream<PedestrianStatus> _pedestrianStatusStream;
+  late Stream<PedestrianStatus> _pedestrianStatusStream;
   late String _steps = '0';
-  // final _status = '?',
+  late String _status = '--';
+
 
   @override
   void initState() {
@@ -68,33 +70,41 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   //Pedastrian Status- Walking, Running, Stopped,etc
-  // void onPedestrianStatusChanged(PedestrianStatus event) {
-  //   DateTime timeStamp = event.timeStamp;
-  //   print(event);
-  //   print(timeStamp);
-  //   setState(() {
-  //     _status = event.status;
-  //   });
-  // }
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    DateTime timeStamp = event.timeStamp;
+    if (kDebugMode) {
+      print(event);
+    }
+    if (kDebugMode) {
+      print(timeStamp);
+    }
+    setState(() {
+      _status = event.status;
+    });
+  }
 
-  // void onPedestrianStatusError(error) {
-  //   print('onPedestrianStatusError: $error');
-  //   setState(() {
-  //     _status = 'Pedestrian Status not available';
-  //   });
-  //   print(_status);
-  // }
+  void onPedestrianStatusError(error) {
+    if (kDebugMode) {
+      print('onPedestrianStatusError: $error');
+    }
+    setState(() {
+      _status = 'Pedestrian Status not available';
+    });
+    if (kDebugMode) {
+      print(_status);
+    }
+  }
 
   Future<void> initPlatformState() async {
     // Init streams
-    // _pedestrianStatusStream = await Pedometer.pedestrianStatusStream;
+    _pedestrianStatusStream =  Pedometer.pedestrianStatusStream;
     _stepCountStream = Pedometer.stepCountStream;
 
     // Listen to streams and handle errors
     _stepCountStream.listen(onStepCount).onError(onStepCountError);
-    // _pedestrianStatusStream
-    //     .listen(onPedestrianStatusChanged)
-    //     .onError(onPedestrianStatusError);
+    _pedestrianStatusStream
+        .listen(onPedestrianStatusChanged)
+        .onError(onPedestrianStatusError);
 
     if (!mounted) return;
   }
@@ -128,6 +138,7 @@ class _ScannerPageState extends State<ScannerPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -145,6 +156,7 @@ class _ScannerPageState extends State<ScannerPage> {
                     Column(
                       children: [
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               padding: const EdgeInsets.all(10),
@@ -178,93 +190,251 @@ class _ScannerPageState extends State<ScannerPage> {
                                   ),
                                 ],
                               ),
-                            )
-
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                              child: CircleAvatar(
+                                backgroundColor: kLightRed,
+                                child: Text('$score'),
+                              ),
+                            ),
+                            const Text("Score"),
                           ],
                         ),
+
                       ],
                     ),
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 0,
-                              horizontal: 5,
-                            ),
-                            decoration: BoxDecoration(
-                                color: kLightRed, borderRadius: BorderRadius.circular(10)),
-                                width: 90,
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        //   child: Container(
+                        //     margin: const EdgeInsets.symmetric(
+                        //       vertical: 0,
+                        //       horizontal: 5,
+                        //     ),
+                        //     decoration: BoxDecoration(
+                        //         color: kLightRed, borderRadius: BorderRadius.circular(10)),
+                        //         width: 90,
+                        //     padding: const EdgeInsets.all(10),
+                        //     child: Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.center,
+                        //       children: [
+                        //         const Text(
+                        //           'Steps',
+                        //           style: TextStyle(
+                        //             fontSize: 18,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //         ),
+                        //         const SizedBox(height: 8),
+                        //         Text(
+                        //           _steps,
+                        //           style: const TextStyle(fontSize: 20),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        //   child: Column(
+                        //     children: [
+                        //       Container(
+                        //         margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        //         child: Stack(
+                        //           children: [
+                        //             // CircleAvatar with flame icon
+                        //             const CircleAvatar(
+                        //               backgroundColor: kLightRed,
+                        //               radius: 25.0,
+                        //               child: Icon(
+                        //                 LucideIcons.flame,
+                        //                 color: kRed,
+                        //                 size: 19,
+                        //               ),
+                        //             ),
+                        //             // Text with calorie value and unit
+                        //             Positioned(
+                        //               bottom: 1, // Adjust positioning as needed
+                        //               right: 12, // Adjust positioning as needed
+                        //               child: Text(
+                        //                 (((int.parse(_steps) * cal.toDouble()) / 1000) / 1000).toStringAsFixed(2),
+                        //                 style: const TextStyle(
+                        //                   fontSize: 10,
+                        //                   fontWeight: FontWeight.bold,
+                        //                   color: Colors.black87, // White text on red background
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //       const Text("Calories"),
+                        //       const SizedBox(height: 10),
+                        //       Container(
+                        //         margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                        //         child: CircleAvatar(
+                        //           backgroundColor: kLightRed,
+                        //           child: Text('$score'),
+                        //         ),
+                        //       ),
+                        //       const Text("Score"),
+                        //     ],
+                        //   ),
+                        // ),
+                        Container(
+                          width: 230,
+                          height: 115,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                            color: Color.fromRGBO(210, 4, 45, 0.8),
+                          ),
+                          child: Padding(padding: const EdgeInsets.all(15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Steps',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: 80,
+                                  height: 80,
+                                  child: SfRadialGauge(
+                                    enableLoadingAnimation: true,
+                                    // backgroundColor: Colors.indigo,
+                                    axes: <RadialAxis>[
+                                      RadialAxis(
+                                        showLabels: false,
+                                        showTicks: false,
+                                        startAngle: 270,
+                                        endAngle: 270,
+                                        minimum: 0,
+                                        maximum: 26000,
+                                        radiusFactor: 1.1,
+                                        axisLineStyle: const AxisLineStyle(
+                                          color: Color.fromRGBO(250, 160, 160,0.5),
+                                          thicknessUnit: GaugeSizeUnit.factor,
+                                          thickness: 0.1,
+                                        ),
+                                        pointers: <GaugePointer>[
+                                          RangePointer(
+                                            value: double.parse(_steps),
+                                            cornerStyle: CornerStyle.bothCurve,
+                                            enableAnimation: true,
+                                            animationDuration: 1200,
+                                            animationType: AnimationType.ease,
+                                            sizeUnit: GaugeSizeUnit.factor,
+                                            color: const Color.fromRGBO(253, 254, 255,1.0),
+                                            width: 0.1,
+                                          ),
+                                        ],
+                                        annotations: <GaugeAnnotation>[
+                                          GaugeAnnotation(
+                                            angle: 0,
+                                            positionFactor: 0.1,
+                                            widget:
+                                            Text.rich( TextSpan(
+                                                children:[
+                                                  TextSpan(text: "${_steps} \n",
+                                                    style: const TextStyle(
+                                                      fontSize: 17.5,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color.fromRGBO(253, 254, 255, 1.0),
+                                                      // fontStyle: FontStyle.italic,
+                                                    ),
+                                                  ),
+                                                  const TextSpan(text: 'Steps',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Color.fromRGBO(136, 8, 8, 1.0),
+                                                      // fontStyle: FontStyle.italic,
+                                                    ),
+                                                  ),
+                                                ]
+                                            )
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  _steps,
-                                  style: const TextStyle(fontSize: 20),
+                                const SizedBox(width: 18,),
+                                SizedBox(
+                                  // color: Colors.indigoAccent,
+                                  width: 100,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                      _status,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color.fromRGBO(136, 8, 8, 1.0),
+                                        // fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                      const Text.rich( TextSpan(
+                                          children:[
+                                            TextSpan(text: 'Goal: ',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color.fromRGBO(136, 8, 8, 1.0),
+                                                // fontStyle: FontStyle.italic,
+                                              ),
+                                            ),
+                                            TextSpan(text: '25000',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color.fromRGBO(253, 254, 255, 1.0),
+                                                // fontStyle: FontStyle.italic,
+                                              ),
+                                            ),
+                                          ]
+                                      )
+                                      ),
+                                      const Divider(
+                                        height: 13,
+                                        thickness: 2,
+                                        // indent: 20,
+                                        endIndent: 0,
+                                        color: Color.fromRGBO(136, 8, 8, 1.0),
+                                      ),
+                                      Text.rich( TextSpan(
+                                        children:[
+                                          TextSpan(text: ((((double.parse(_steps)*cal)/1000)/1000).toStringAsFixed(2)).toString() ,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color.fromRGBO(253, 254, 255, 1.0),
+                                                // fontStyle: FontStyle.italic,
+                                              ),
+                                          ),
+                                          const TextSpan(text: ' kcal',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color.fromRGBO(136, 8, 8, 1.0),
+                                              // fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ]
+                                      )
+                                      )
+                                    ],
+                                  )
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                                child: Stack(
-                                  children: [
-                                    // CircleAvatar with flame icon
-                                    const CircleAvatar(
-                                      backgroundColor: kLightRed,
-                                      radius: 25.0,
-                                      child: Icon(
-                                        LucideIcons.flame,
-                                        color: kRed,
-                                        size: 19,
-                                      ),
-                                    ),
-                                    // Text with calorie value and unit
-                                    Positioned(
-                                      bottom: 1, // Adjust positioning as needed
-                                      right: 12, // Adjust positioning as needed
-                                      child: Text(
-                                        (((int.parse(_steps) * cal.toDouble()) / 1000) / 1000).toStringAsFixed(2),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87, // White text on red background
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Text("Calories"),
-                              const SizedBox(height: 10),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                                child: CircleAvatar(
-                                  backgroundColor: kLightRed,
-                                  child: Text('$score'),
-                                ),
-                              ),
-                              const Text("Score"),
-                            ],
-                          ),
-                        ),
+                        const SizedBox(width: 5,)
                       ],
                     ),
                   ],
